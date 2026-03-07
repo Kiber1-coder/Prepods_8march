@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>С 8 Марта, мамочка!</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        background: linear-gradient(
+          180deg,
+          #fce4ec 0%,
+          #f3e5f5 25%,
+          #e8f5e9 50%,
+          #e3f2fd 75%,
+          #fce4ec 100%
+        );
+        font-family: "Montserrat", sans-serif;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Падающие лепестки */
+      .petals-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .petal {
+        position: absolute;
+        font-size: 20px;
+        opacity: 0.6;
+        animation: fall linear infinite;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(-10vh) rotate(0deg) translateX(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.8;
+        }
+        90% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(110vh) rotate(720deg) translateX(100px);
+          opacity: 0;
+        }
+      }
+
+      /* Основной контейнер */
+      .card-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* Шапка */
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+        opacity: 0;
+        animation: fadeInDown 1s ease forwards;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .header h1 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: #d81b60;
+        text-shadow: 2px 2px 4px rgba(216, 27, 96, 0.2);
+        margin-bottom: 10px;
+        letter-spacing: 2px;
+      }
+
+      .header .subtitle {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.5rem;
+        font-style: italic;
+        color: #880e4f;
+        font-weight: 400;
+      }
+
+      /* Декоративные цветы по углам */
+      .corner-flower {
+        position: fixed;
+        width: 120px;
+        height: 120px;
+        pointer-events: none;
+        z-index: 3;
+        opacity: 0;
+        animation: fadeIn 1s ease forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .corner-flower.top-left {
+        top: 20px;
+        left: 20px;
+        animation-delay: 0.3s;
+      }
+
+      .corner-flower.top-right {
+        top: 20px;
+        right: 20px;
+        transform: scaleX(-1);
+        animation-delay: 0.5s;
+      }
+
+      .corner-flower.bottom-left {
+        bottom: 20px;
+        left: 20px;
+        transform: scaleY(-1);
+        animation-delay: 0.7s;
+      }
+
+      .corner-flower.bottom-right {
+        bottom: 20px;
+        right: 20px;
+        transform: scale(-1, -1);
+        animation-delay: 0.9s;
+      }
+
+      .corner-flower svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Поздравление */
+      .greeting {
+        text-align: center;
+        margin: 50px 0;
+        padding: 0 20px;
+        opacity: 0;
+        animation: fadeInUp 1s ease forwards;
+        animation-delay: 0.6s;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .greeting-text {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.6rem;
+        line-height: 2;
+        color: #4a148c;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .greeting-text p {
+        margin-bottom: 20px;
+      }
+
+      /* Пожелания */
+      .wishes {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 0 20px;
+        opacity: 0;
+        animation: fadeInUp 1s ease forwards;
+        animation-delay: 0.9s;
+      }
+
+      .wish-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 15px 20px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        font-family: "Montserrat", sans-serif;
+        font-size: 1.1rem;
+        color: #880e4f;
+      }
+
+      .wish-item:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(216, 27, 96, 0.2);
+        background: rgba(255, 255, 255, 0.95);
+      }
+
+      .wish-item .icon {
+        font-size: 1.8rem;
+        animation: pulse 2s ease infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+      }
+
+      /* Подпись */
+      .signature {
+        text-align: center;
+        margin-top: 60px;
+        padding-bottom: 40px;
+        opacity: 0;
+        animation: fadeInUp 1s ease forwards;
+        animation-delay: 1.2s;
+      }
+
+      .signature-text {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-size: 1.5rem;
+        color: #d81b60;
+        position: relative;
+        display: inline-block;
+      }
+
+      .signature-text::before,
+      .signature-text::after {
+        content: "🌸";
+        margin: 0 15px;
+        font-size: 1.2rem;
+      }
+
+      /* Декоративная линия */
+      .decor-line {
+        width: 200px;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          #f48fb1,
+          #ce93d8,
+          #f48fb1,
+          transparent
+        );
+        margin: 30px auto;
+        opacity: 0;
+        animation: fadeIn 1s ease forwards;
+        animation-delay: 1s;
+      }
+
+      /* Адаптивность */
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 2.5rem;
+        }
+
+        .header .subtitle {
+          font-size: 1.3rem;
+        }
+
+        .greeting-text {
+          font-size: 1.4rem;
+        }
+
+        .wishes {
+          grid-template-columns: 1fr;
+          max-width: 350px;
+        }
+
+        .corner-flower {
+          width: 80px;
+          height: 80px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .card-container {
+          padding: 30px 15px;
+        }
+
+        .header h1 {
+          font-size: 2rem;
+        }
+
+        .header .subtitle {
+          font-size: 1.1rem;
+        }
+
+        .greeting-text {
+          font-size: 1.2rem;
+          line-height: 1.8;
+        }
+
+        .wish-item {
+          font-size: 1rem;
+          padding: 12px 18px;
+        }
+
+        .wish-item .icon {
+          font-size: 1.5rem;
+        }
+
+        .signature-text {
+          font-size: 1.3rem;
+        }
+
+        .corner-flower {
+          width: 60px;
+          height: 60px;
+        }
+      }
+
+      /* Бабочки */
+      .butterfly {
+        position: fixed;
+        font-size: 25px;
+        pointer-events: none;
+        z-index: 2;
+        opacity: 0.6;
+        animation: flutter 8s ease-in-out infinite;
+      }
+
+      @keyframes flutter {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+          transform: translate(50px, -30px) rotate(10deg);
+        }
+        50% {
+          transform: translate(100px, 0) rotate(0deg);
+        }
+        75% {
+          transform: translate(50px, 30px) rotate(-10deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Падающие лепестки -->
+    <div class="petals-container" id="petals"></div>
+
+    <!-- Бабочки -->
+    <div class="butterfly" style="top: 20%; left: 10%">🦋</div>
+    <div class="butterfly" style="top: 60%; right: 15%; animation-delay: 2s">
+      🦋
+    </div>
+    <div class="butterfly" style="top: 80%; left: 20%; animation-delay: 4s">
+      🦋
+    </div>
+
+    <!-- Декоративные цветы по углам -->
+    <div class="corner-flower top-left">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="15" fill="#f48fb1" />
+        <ellipse cx="50" cy="25" rx="10" ry="20" fill="#f8bbd9" />
+        <ellipse
+          cx="75"
+          cy="50"
+          rx="10"
+          ry="20"
+          fill="#f8bbd9"
+          transform="rotate(90 75 50)"
+        />
+        <ellipse cx="50" cy="75" rx="10" ry="20" fill="#f8bbd9" />
+        <ellipse
+          cx="25"
+          cy="50"
+          rx="10"
+          ry="20"
+          fill="#f8bbd9"
+          transform="rotate(90 25 50)"
+        />
+        <circle cx="50" cy="50" r="8" fill="#fce4ec" />
+      </svg>
+    </div>
+    <div class="corner-flower top-right">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="15" fill="#ce93d8" />
+        <ellipse cx="50" cy="25" rx="10" ry="20" fill="#e1bee7" />
+        <ellipse
+          cx="75"
+          cy="50"
+          rx="10"
+          ry="20"
+          fill="#e1bee7"
+          transform="rotate(90 75 50)"
+        />
+        <ellipse cx="50" cy="75" rx="10" ry="20" fill="#e1bee7" />
+        <ellipse
+          cx="25"
+          cy="50"
+          rx="10"
+          ry="20"
+          fill="#e1bee7"
+          transform="rotate(90 25 50)"
+        />
+        <circle cx="50" cy="50" r="8" fill="#f3e5f5" />
+      </svg>
+    </div>
+    <div class="corner-flower bottom-left">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="15" fill="#a5d6a7" />
+        <ellipse cx="50" cy="25" rx="10" ry="20" fill="#c8e6c9" />
+        <ellipse
+          cx="75"
+          cy="50"
+          rx="10"
+          ry="20"
+          fill="#c8e6c9"
+          transform="rotate(90 75 50)"
+        />
+        <ellipse cx="50" cy="75" rx="10" ry="20" fill="#c8e6c9" />
+        <ellipse
+          cx="25"
+          cy="50"
+          rx="10"
+          ry="20"
+          fill="#c8e6c9"
+          transform="rotate(90 25 50)"
+        />
+        <circle cx="50" cy="50" r="8" fill="#e8f5e9" />
+      </svg>
+    </div>
+    <div class="corner-flower bottom-right">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="15" fill="#90caf9" />
+        <ellipse cx="50" cy="25" rx="10" ry="20" fill="#bbdefb" />
+        <ellipse
+          cx="75"
+          cy="50"
+          rx="10"
+          ry="20"
+          fill="#bbdefb"
+          transform="rotate(90 75 50)"
+        />
+        <ellipse cx="50" cy="75" rx="10" ry="20" fill="#bbdefb" />
+        <ellipse
+          cx="25"
+          cy="50"
+          rx="10"
+          ry="20"
+          fill="#bbdefb"
+          transform="rotate(90 25 50)"
+        />
+        <circle cx="50" cy="50" r="8" fill="#e3f2fd" />
+      </svg>
+    </div>
+
+    <div class="card-container">
+      <!-- Шапка -->
+      <header class="header">
+        <h1>С 8 Марта, мамочка!</h1>
+        <p class="subtitle">Самой родной и любимой</p>
+      </header>
+
+      <!-- Поздравление -->
+      <div class="greeting">
+        <div class="greeting-text">
+          <p>С весенним праздником, мамуля!</p>
+          <p>Пусть в твоей душе всегда цветут цветы,</p>
+          <p>Пусть каждый день согревает тепло и забота,</p>
+          <p>А глаза сияют от счастья и радости!</p>
+          <p>Спасибо тебе за всё!</p>
+        </div>
+      </div>
+
+      <!-- Декоративная линия -->
+      <div class="decor-line"></div>
+
+      <!-- Пожелания -->
+      <div class="wishes">
+        <div class="wish-item">
+          <span class="icon">🌷</span>
+          <span>Весеннего настроения</span>
+        </div>
+        <div class="wish-item">
+          <span class="icon">☀️</span>
+          <span>Тепла и света</span>
+        </div>
+        <div class="wish-item">
+          <span class="icon">🌸</span>
+          <span>Цветущего здоровья</span>
+        </div>
+        <div class="wish-item">
+          <span class="icon">💐</span>
+          <span>Радости и улыбок</span>
+        </div>
+      </div>
+
+      <!-- Подпись -->
+      <div class="signature">
+        <p class="signature-text">С любовью, твоя доча</p>
+      </div>
+    </div>
+
+    <script>
+      // Создание падающих лепестков
+      function createPetals() {
+        const petalsContainer = document.getElementById("petals");
+        const petalEmojis = ["🌸", "", "🌷", "🌹", "💐", "🌼"];
+        const petalCount = 20;
+
+        for (let i = 0; i < petalCount; i++) {
+          const petal = document.createElement("div");
+          petal.className = "petal";
+          petal.innerHTML =
+            petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+          petal.style.left = Math.random() * 100 + "%";
+          petal.style.animationDuration = Math.random() * 5 + 5 + "s";
+          petal.style.animationDelay = Math.random() * 5 + "s";
+          petal.style.fontSize = Math.random() * 15 + 15 + "px";
+          petalsContainer.appendChild(petal);
+        }
+      }
+
+      // Плавное появление элементов при скролле
+      function setupScrollAnimation() {
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: "0px",
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = "1";
+              entry.target.style.transform = "translateY(0)";
+            }
+          });
+        }, observerOptions);
+
+        document.querySelectorAll(".wish-item").forEach((el, index) => {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(20px)";
+          el.style.transition = "all 0.5s ease";
+          el.style.transitionDelay = index * 0.1 + "s";
+          observer.observe(el);
+        });
+      }
+
+      // Запуск при загрузке
+      document.addEventListener("DOMContentLoaded", function () {
+        createPetals();
+        setupScrollAnimation();
+
+        // Добавляем дополнительную анимацию для заголовка
+        const header = document.querySelector(".header h1");
+        header.style.background =
+          "linear-gradient(90deg, #d81b60, #880e4f, #d81b60)";
+        header.style.backgroundSize = "200% auto";
+        header.style.webkitBackgroundClip = "text";
+        header.style.webkitTextFillColor = "transparent";
+        header.style.animation = "shine 3s linear infinite";
+
+        // Добавляем ключевые кадры для анимации текста
+        const style = document.createElement("style");
+        style.textContent = `
+              @keyframes shine {
+                  to {
+                      background-position: 200% center;
+                  }
+              }
+          `;
+        document.head.appendChild(style);
+      });
+
+      // Добавляем случайные бабочки при клике
+      document.addEventListener("click", function (e) {
+        const butterfly = document.createElement("div");
+        butterfly.className = "butterfly";
+        butterfly.innerHTML = "🦋";
+        butterfly.style.left = e.pageX + "px";
+        butterfly.style.top = e.pageY + "px";
+        butterfly.style.position = "fixed";
+        butterfly.style.pointerEvents = "none";
+        butterfly.style.zIndex = "100";
+        butterfly.style.animation = "flutter 3s ease-out forwards";
+        document.body.appendChild(butterfly);
+
+        setTimeout(() => {
+          butterfly.remove();
+        }, 3000);
+      });
+    </script>
+  </body>
+</html>
