@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Любимой бабушке! 💕</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        background: linear-gradient(
+          45deg,
+          #ff9a9e,
+          #fad0c4,
+          #fad0c4,
+          #a18cd1,
+          #fbc2eb
+        );
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .header {
+        text-align: center;
+        padding: 30px 20px;
+        animation: bounceIn 1s ease;
+      }
+
+      @keyframes bounceIn {
+        0% {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        color: #fff;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .heart-container {
+        font-size: 3em;
+        animation: heartbeat 1.5s infinite;
+      }
+
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        25% {
+          transform: scale(1.1);
+        }
+        50% {
+          transform: scale(1);
+        }
+        75% {
+          transform: scale(1.1);
+        }
+      }
+
+      /* Одно большое фото */
+      .photo-frame {
+        background: white;
+        border-radius: 30px;
+        padding: 20px;
+        margin: 30px 0;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        animation: float 3s ease-in-out infinite;
+        text-align: center;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .photo-frame img {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .message-box {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 30px;
+        padding: 40px;
+        margin: 30px 0;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        animation: slideUp 1s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .message-box h2 {
+        color: #ff6b6b;
+        font-size: 2em;
+        margin-bottom: 20px;
+      }
+
+      .message-box p {
+        color: #555;
+        font-size: 1.2em;
+        line-height: 1.8;
+      }
+
+      .decorations {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .decoration {
+        position: absolute;
+        font-size: 2em;
+        animation: fall 10s linear infinite;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(-100px) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .footer {
+        text-align: center;
+        padding: 20px;
+        color: white;
+        font-size: 0.9em;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 600px) {
+        .header h1 {
+          font-size: 1.8em;
+        }
+
+        .photo-frame {
+          padding: 15px;
+        }
+
+        .message-box {
+          padding: 25px;
+        }
+
+        .message-box h2 {
+          font-size: 1.5em;
+        }
+
+        .message-box p {
+          font-size: 1em;
+        }
+
+        .heart-container {
+          font-size: 2em;
+        }
+      }
+
+      /* Падающие сердечки по клику */
+      .click-heart {
+        position: fixed;
+        font-size: 2em;
+        pointer-events: none;
+        animation: heartFly 1.5s ease forwards;
+        z-index: 999;
+      }
+
+      @keyframes heartFly {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-200px) scale(0.5);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="decorations" id="decorations"></div>
+
+    <div class="container">
+      <div class="header">
+        <div class="heart-container">💕</div>
+        <h1>Любимой бабушке!</h1>
+        <div class="heart-container">💕</div>
+      </div>
+
+      <!-- ОДНО БОЛЬШОЕ ФОТО -->
+      <div class="photo-frame">
+        <!-- ЗАМЕНИТЕ НА ВАШЕ ФОТО -->
+        <img src="image.png" alt="Любимая бабушка" />
+      </div>
+
+      <div class="message-box">
+        <h2>🌸 Дорогая бабушка! 🌸</h2>
+        <p>
+          Ты самая лучшая, добрая и заботливая!<br />
+          Спасибо за твою любовь, тепло и мудрость.<br />
+          Желаю тебе здоровья, счастья и улыбок каждый день!<br />
+          <br />
+          <strong>Я тебя люблю! 💖</strong>
+        </p>
+      </div>
+
+      <div class="footer">
+        <p>Сделано с любовью для тебя ❤️</p>
+        <p style="margin-top: 10px; font-size: 0.8em">Нажми на экран 💕</p>
+      </div>
+    </div>
+
+    <script>
+      // Создаём падающие украшения
+      function createDecorations() {
+        const decorations = document.getElementById("decorations");
+        const emojis = ["🌸", "💕", "🦋", "⭐", "🌺", "💖", "🌷", "✨"];
+
+        for (let i = 0; i < 15; i++) {
+          const decoration = document.createElement("div");
+          decoration.className = "decoration";
+          decoration.textContent =
+            emojis[Math.floor(Math.random() * emojis.length)];
+          decoration.style.left = Math.random() * 100 + "%";
+          decoration.style.animationDelay = Math.random() * 5 + "s";
+          decoration.style.animationDuration = Math.random() * 5 + 8 + "s";
+          decorations.appendChild(decoration);
+        }
+      }
+
+      // Сердечки по клику в любом месте экрана
+      document.addEventListener("click", function (e) {
+        const hearts = ["💕", "💖", "💗", "💓", "💞"];
+        const heart = document.createElement("div");
+        heart.className = "click-heart";
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = e.clientX - 20 + "px";
+        heart.style.top = e.clientY - 20 + "px";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 1500);
+      });
+
+      // Запускаем украшения при загрузке
+      window.onload = createDecorations;
+    </script>
+  </body>
+</html>
