@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>С 8 Марта!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --pink-light: #fce7f3;
+            --pink-accent: #db2777;
+            --glass: rgba(255, 255, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--pink-light) 0%, #f9a8d4 100%);
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        #flower-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .flower {
+            position: absolute;
+            animation: fall linear forwards;
+            will-change: transform;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        /* Адаптивный конверт */
+        .envelope-wrapper {
+            position: relative;
+            width: 90vw;
+            max-width: 320px;
+            height: 220px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-wrapper::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            background: linear-gradient(to top right, rgba(255,255,255,0.4) 50%, transparent 50%);
+            border-radius: 0 0 0 15px;
+        }
+
+        .envelope-wrapper::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            background: linear-gradient(to top left, rgba(255,255,255,0.5) 50%, transparent 50%);
+            border-radius: 0 0 15px 0;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            clip-path: polygon(0 0, 100% 0, 50% 55%);
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            z-index: 5;
+        }
+
+        .letter {
+            position: absolute;
+            top: 5px;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            z-index: 2;
+            opacity: 0; /* Текст скрыт, пока конверт закрыт */
+            transform: translateY(0);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .letter h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--pink-accent);
+            margin-bottom: 15px;
+        }
+
+        .letter p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #4b5563;
+            font-style: italic;
+        }
+
+        /* Анимация открытия */
+        .open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .open .letter {
+            transform: translateY(-130px);
+            height: 240px;
+            opacity: 1;
+            z-index: 3;
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: #f472b6;
+            transform: translate(-50%, -50%) rotate(45deg);
+            z-index: 6;
+            transition: opacity 0.3s;
+        }
+        .heart-seal::before, .heart-seal::after {
+            content: "";
+            width: 30px; height: 30px;
+            background: #f472b6; border-radius: 50%;
+            position: absolute;
+        }
+        .heart-seal::before { left: -15px; }
+        .heart-seal::after { top: -15px; }
+
+        .open .heart-seal { opacity: 0; }
+
+        .instruction {
+            position: absolute;
+            bottom: -50px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 0.9rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="flower-container"></div>
+
+    <div class="envelope-wrapper" id="envelope" onclick="toggleEnvelope()">
+        <div class="flap"></div>
+        <div class="heart-seal"></div>
+        <div class="letter">
+            <h2>Для тебя ✨</h2>
+            <p id="wish-text"></p>
+        </div>
+        <div class="instruction">Нажми, чтобы открыть</div>
+    </div>
+
+    <script>
+        const wishes = [
+            "Пусть твоя жизнь будет наполнена светом, нежностью и самыми красивыми цветами.",
+            "Желаю, чтобы каждый твой день начинался с улыбки и вдохновения.",
+            "Пусть весна принесёт в твой дом тепло, гармонию и бесконечную радость.",
+            "Оставайся такой же удивительной и неповторимой. Пусть сбываются все мечты!",
+            "Желаю море ярких моментов, искренних людей рядом и настоящего счастья.",
+            "Пусть твоя доброта и красота продолжают освещать мир вокруг тебя.",
+            "Желаю новых открытий, смелых целей и лёгкости в их достижении.",
+            "Пусть этот праздник станет началом чего-то прекрасного в твоей жизни.",
+            "Желаю тебе всегда чувствовать поддержку близких и верить в свои силы.",
+            "Пусть в твоей душе всегда поёт весна, независимо от погоды за окном."
+        ];
+
+        function toggleEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const wishText = document.getElementById('wish-text');
+
+            if (!envelope.classList.contains('open')) {
+                // Выбираем случайное пожелание
+                wishText.innerText = wishes[Math.floor(Math.random() * wishes.length)];
+                envelope.classList.add('open');
+
+                // Запуск праздничного конфетти
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#db2777', '#fbcfe8', '#ffffff'],
+                    zIndex: 1000
+                });
+            } else {
+                envelope.classList.remove('open');
+            }
+        }
+
+        // Фоновые лепестки
+        function createFlower() {
+            const container = document.getElementById('flower-container');
+            const flower = document.createElement('div');
+            const icons = ['🌸', '🌷', '✨', '💕'];
+            flower.className = 'flower';
+            flower.innerText = icons[Math.floor(Math.random() * icons.length)];
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.top = '-10%';
+            const duration = 4 + Math.random() * 3;
+            flower.style.animationDuration = duration + 's';
+            flower.style.fontSize = (15 + Math.random() * 15) + 'px';
+            flower.style.opacity = 0.5 + Math.random() * 0.5;
+            container.appendChild(flower);
+            setTimeout(() => flower.remove(), duration * 1000);
+        }
+        setInterval(createFlower, 600);
+    </script>
+</body>
+</html>
